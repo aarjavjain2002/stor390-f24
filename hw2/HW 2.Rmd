@@ -68,4 +68,4 @@ Choosing `K = 6` would not be ideal for this data as the training data is predom
 
 Build a github repository to store your homework assignments. Share the link in this file.
 
-*STUDENT INPUT*
+<https://github.com/aarjavjain2002/stor390-f24>
