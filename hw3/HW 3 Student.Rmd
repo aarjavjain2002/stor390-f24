@@ -94,12 +94,12 @@ It would appear that we are better capturing the training data, but comment on t
 
 Create a confusion matrix by using this svm to predict on the current testing partition. Comment on the confusion matrix. Is there any disparity in our classification results?
 
-```{r, eval = FALSE}
+```{r}
 #remove eval = FALSE in above
 table(true=dat[-training_indices,"y"], pred=predict(svmfit, newdata=dat[-training_indices,]))
 ```
 
-**-\> There is a disparity in our classification results. We see that the model incorrectly classifies many of the Class 1 instances as Class 2 with an accuracy of 78% (17 out of the 79 true Class 1 labels were misclassified as Class 2). Its accuracy for Class 2 is a little better, where it correctly identified 18 out of 21 true Class 2 labels, which gives it an accuracy of 85%.**
+**-\> There is a disparity in our classification results. We see that the model incorrectly classifies many of the Class 1 instances as Class 2 with an accuracy of 78% (17 out of the 79 true Class 1 labels were misclassified as Class 2). Its accuracy for Class 2 is a little better, where it correctly identified 18 out of 21 true Class 2 labels, which gives it an accuracy of 85%. Overall, the accuracy of the model is 80%, classifying exactly 80 entries correctly out of 100.**
 
 Is this disparity because of imbalance in the training/testing partition? Find the proportion of class `2` in your training partition and see if it is broadly representative of the underlying 25% of class 2 in the data as a whole.
 
@@ -122,20 +122,31 @@ Let's try and balance the above to solutions via cross-validation. Using the `tu
 
 set.seed(1)
 
+cost_values <- c(0.1, 1, 10, 100, 1000)
+gamma_values <- c(0.5, 1, 2, 3, 4)
 
+# Create a list of parameters to tune
+tune_parameters <- list(
+  cost = cost_values,
+  gamma = gamma_values
+)
+
+tune.out <- tune(svm, y~., data = training_data, kernel="radial", ranges = tune_parameters, tunecontrol =  tune.control(cross = 10))
+
+print(summary(tune.out))
 ```
 
 I will take `tune.out` and use the best model according to error rate to test on our data. I will report a confusion matrix corresponding to the 100 predictions.
 
-```{r, eval = FALSE}
-table(true=dat[-train,"y"], pred=predict(tune.out$best.model, newdata=dat[-train,]))
+```{r}
+table(true=dat[-training_indices,"y"], pred=predict(tune.out$best.model, newdata=dat[-training_indices,]))
 ```
 
 ## 
 
 Comment on the confusion matrix. How have we improved upon the model in question 2 and what qualifications are still necessary for this improved model.
 
-*Student Response*
+**-\> We have made significant improvements in the models accuracy, jumping up from 80% to 92% in overall accuracy. The accuracy for class one increased to 91% (72/79) and the accuracy for class two increased to 95% (20/21). The new parameters have improved performance. However, we do need to be a little bit careful and keep in mind overfitting. We want to be able to generalize the model so that it performs well on on scene data.**
 
 # 
 
@@ -147,6 +158,7 @@ library(kmed)
 data(heart)
 library(tree)
 
+head(heart)
 ```
 
 ## 
@@ -154,8 +166,9 @@ library(tree)
 The response variable is currently a categorical variable with four levels. Convert heart disease into binary categorical variable. Then, ensure that it is properly stored as a factor.
 
 ```{r}
+heart$disease_binary <- as.factor(ifelse(heart$class >= 2, 1, 0))
 
-
+head(heart, 20)
 ```
 
 ## 
@@ -164,7 +177,14 @@ Train a classification tree on a 240 observation training subset (using the seed
 
 ```{r}
 set.seed(101)
+train_indices <- sample(1:nrow(heart), 240)
+heart_train <- heart[train_indices, ]
+heart_test <- heart[-train_indices, ]
 
+tree_model <- tree(disease_binary ~ .-class, data = heart_train)
+
+plot(tree_model)
+text(tree_model, pretty = 0)
 ```
 
 ## 
@@ -172,8 +192,11 @@ set.seed(101)
 Use the trained model to classify the remaining testing points. Create a confusion matrix to evaluate performance. Report the classification error rate.
 
 ```{r}
+tree_pred <- predict(tree_model, heart_test, type = "class")
+with(heart_test, table(tree_pred, disease_binary))
 
-
+error_rate <- mean(tree_pred != heart_test$disease_binary)
+print(error_rate)
 ```
 
 ## 
@@ -182,17 +205,31 @@ Above we have a fully grown (bushy) tree. Now, cross validate it using the `cv.t
 
 ```{r}
 set.seed(101)
+cv_tree <- cv.tree(tree_model, FUN = prune.misclass)
 
+plot(cv_tree$size, cv_tree$dev, type = "b")
+
+pruned_tree <- prune.misclass(tree_model, best = 3)
+
+plot(pruned_tree)
+text(pruned_tree, pretty = 0)
+
+tree_pred_pruned <- predict(pruned_tree, heart_test, type = "class")
+
+with(heart_test, table(tree_pred_pruned, disease_binary))
+
+pruned_error_rate <- mean(tree_pred_pruned != heart_test$disease_binary)
+print(pruned_error_rate)
 ```
 
 ## 
 
 Discuss the trade-off in accuracy and interpretability in pruning the above tree.
 
-*Student Input*
+**-\> The pruned tree has much lesser splits, making it very easy to read and increasing interpretability significantly. Despite this reduction in the number of splits, the accuracy remains about the same for this tree at 24.5%. This shows that even though lost a few levels of classification conditions, we can maintain the same accuracy with a bit more heterogeneity in the leaves.**
 
 ## 
 
 Discuss the ways a decision tree could manifest algorithmic bias.
 
-*Student Answer*
+**-\> One of the biggest ways we can have algorithmic bias is by having biased training data. No matter how good the classification parameters get, if the training data itself is biased, then the results will be skewed towards similar results. Additionally, we can have some specific variables that have a high correlation with specific outputs without directly affecting the output. If this is the case in the data, then this specific variable might be used to create one of the initial splits (therefore signifying more importance) despite the fact that this variable did not influence the outcome variable at all. Lastly, looking for higher accuracy during training can lead to overfitting, which would make our model not generalizable for newer data.**
