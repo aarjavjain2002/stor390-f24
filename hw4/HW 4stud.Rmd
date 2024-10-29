@@ -7,27 +7,40 @@ output:
     number_sections: true
 ---
 
-This homework is designed to give you practice working with statistical/philosophical measures of fairness. 
+This homework is designed to give you practice working with statistical/philosophical measures of fairness.
 
-#
-The paper linked below^[https://link.springer.com/article/10.1007/s00146-023-01676-3] discusses potential algorithmic bias in the context of credit.  In particular, banks are now regularly using machine learning algorithms to do an initial screening for credit-worthy loan applicants.  In section 4.5.2, this paper reports the rates at which various racial groups were granted a mortgage.  If we assume that it is a classifier making these predictions^[It is unclear whether this is an algorithm producing these predictions or human] what additional information would be necessary to assess this classifier according to equalized odds?
+# 
 
-*Student Input*.  
+The paper linked below[^1] discusses potential algorithmic bias in the context of credit. In particular, banks are now regularly using machine learning algorithms to do an initial screening for credit-worthy loan applicants. In section 4.5.2, this paper reports the rates at which various racial groups were granted a mortgage. If we assume that it is a classifier making these predictions[^2] what additional information would be necessary to assess this classifier according to equalized odds?
 
-#
-Show or argue that the impossibility result discussed in class does not hold when our two fringe cases^[a) perfect predicting classifier and b) perfectly equal proportions of ground truth class labels across the protected variable] are met.  
+[^1]: <https://link.springer.com/article/10.1007/s00146-023-01676-3>
+
+[^2]: It is unclear whether this is an algorithm producing these predictions or human
+
+**-\> The text currently provides us with information about the approval rates for different racial groups (Faber, 2018). This is given as follows: Whites (71%), Asians (68%), Latinos (63%), and Blacks (54%). To analyze the classifier in the context of equalized odds, we will require more information. Specifically, we will require data on the "Ground Truth" labels i.e. who was approved and actually repaid their loan (the true positives) as well as who was approved but did not pay back their loan (the false positives). Further, this needs to be broken down by racial group. Both the true positive rate and the false positive rate are important to determine if the equalized odds criterion is to be met since it states that the TPR/FPR across racial groups must be the same. IF it is not, then we can say that there is some form of classifier bias against or for a certain racial group. The different approval rates alone could possibly be justified if they accurately represent the different base rates of loan repayment, or they could represent discrimination - in either case, only one out of two can be achieved: equalized odds or perfect prediction accuracy, but not both.**
+
+# 
+
+Show or argue that the impossibility result discussed in class does not hold when our two fringe cases[^3] are met.
+
+[^3]: a) perfect predicting classifier and b) perfectly equal proportions of ground truth class labels across the protected variable
+
+**Case A**
+
+**In this case, we have a perfect classifier. When we have a perfect classifier, the True Positive Rate will always be 100% (or 1) for all groups. This is because only the people who will pay back their loan will get approved. The false positive rate will be 0 since anyone who will default their payment will not get approved. This perfect predictor would lead to the TPR being 1 and the FPR being 0 across all races. Therefore we will have satisfied equalized odds while having perfect accuracy.**
+
+**Case B**
+
+**In this case, we have perfectly equal proportions of ground truth class labels. This means that the base rate across all groups would be the same. Therefore, when the classifier predicts whether a person should be approved or not, it will lead to the same true positive rate and same false positive rate across each group since the base rate is the same across each group, hence eliminating any differences that were present between different class groups.**
+
+# 
+
+How would Rawls's Veil of Ignorance define a protected class? Further, imagine that we preprocessed data by removing this protected variable from consideration before training out algorithm. How could this variable make its way into our interpretation of results nonetheless?
 
 *Student Input*
 
-#
+# 
 
-How would Rawls's Veil of Ignorance define a protected class?  Further, imagine that we preprocessed data by removing this protected variable from consideration before training out algorithm.  How could this variable make its way into our interpretation of results nonetheless?
-
-*Student Input*
-
-#
-
-Based on all arguments discussed in class, is the use of COMPAS to supplement a judge's discretion justifiable.  Defend your position.  This defense should appeal to statistical and philosophical measures of fairness as well as one of our original moral frameworks from the beginning of the course.  Your response should be no more than a paragraph in length. 
+Based on all arguments discussed in class, is the use of COMPAS to supplement a judge's discretion justifiable. Defend your position. This defense should appeal to statistical and philosophical measures of fairness as well as one of our original moral frameworks from the beginning of the course. Your response should be no more than a paragraph in length.
 
 *Student Input*
-
