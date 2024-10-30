@@ -1,7 +1,7 @@
 ---
 title: "HW 4"
-author: "Student Name"
-date: "10/10/2024"
+author: "Aarjav Jain"
+date: "10/29/2024"
 output: 
   html_document:
     number_sections: true
@@ -23,7 +23,8 @@ The paper linked below[^1] discusses potential algorithmic bias in the context o
 
 Show or argue that the impossibility result discussed in class does not hold when our two fringe cases[^3] are met.
 
-[^3]: a) perfect predicting classifier and b) perfectly equal proportions of ground truth class labels across the protected variable
+[^3]:
+    a)  perfect predicting classifier and b) perfectly equal proportions of ground truth class labels across the protected variable
 
 **Case A**
 
@@ -37,10 +38,14 @@ Show or argue that the impossibility result discussed in class does not hold whe
 
 How would Rawls's Veil of Ignorance define a protected class? Further, imagine that we preprocessed data by removing this protected variable from consideration before training out algorithm. How could this variable make its way into our interpretation of results nonetheless?
 
-*Student Input*
+**-\> Under Rawl's Veil of Ignorance, people make decisions about the structure of society behind a "Veil" which prevents them from knowing characteristics about themselves: their race, social status, ethnicity, disability status, etc. Because people do not have this information, they could potentially be a part of any group. As a result, the idea is that they are more likely to set up a society that is more fair and just. However, because they also know that certain groups of people in society face unjust behavior and an inequitable lifestyle, they may make special arrangements or rules in order to protect such groups of people and ensure that society is fair to all. These groups of people who might be disadvantaged due to societal norms due to their race, gender, socioeconomic status, etc. are known as the protected class.**
+
+**Even if we remove the protected variable, it can re enter our analysis in a few different way. One of the ways is through proxy variables. These can include the zip code of a neighborhood (similar communities in a region), name (infer the race or ethnicity), primary language spoken, etc. With all these variables, the protected variable can likely be inferred and reintroduced to the results. Another way this can happen is through patterns in correlated variables. An example of this could be income which can directly influence the neighborhood one can afford to live in. In this manner, one could reintroduce some sort of protected variable as the algorithm can pick up on this correlation between income and neighborhood and thus reintroduce some form of bias similar to if the protected variable was still present.**
 
 # 
 
 Based on all arguments discussed in class, is the use of COMPAS to supplement a judge's discretion justifiable. Defend your position. This defense should appeal to statistical and philosophical measures of fairness as well as one of our original moral frameworks from the beginning of the course. Your response should be no more than a paragraph in length.
 
-*Student Input*
+**-\> The use of COMPAS in its current state is not justifiable due to its inherent biases and fairness issues. From a utilitarian perspective, where one seeks to maximize the good of society overall, COMPAS is not a good tool as it is subject to racial bias and poor prediction accuracy at only about 65%**[^4]. **Additionally, it violates the principle of equalized odds as it has different false positive rates for different racial groups, with Black people having a much higher chance of being incorrectly labeled as repeat offenders. Moreover, it violates Rawl's Veil of Ignorance principle, where any person deciding on societal rules would not be willing to choose an algorithm such as COMPAS which would then unfavorably treat an already disadvantaged group. I believe that the use of COMPAS, even if as a tool to supplement a judge's discretion, is not justifiable due to its current performance and its inability to fulfill the above measures of fairness.**
+
+[^4]: [**https://www.propublica.org/article/how-we-analyzed-the-compas-recidivism-algorithm**](https://www.propublica.org/article/how-we-analyzed-the-compas-recidivism-algorithm){.uri}
