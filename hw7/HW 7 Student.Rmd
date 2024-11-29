@@ -15,7 +15,7 @@ Recall that in class we showed that for randomized response differential privacy
 
 I want you to generalize this result for a potentially biased coin. That is, for a differentially private mechanism that uses a coin landing heads up with probability $0 \leq \theta \leq 1$, find an estimate $\hat{P}$ for the proportion of incriminating observations. This expression should be in terms of $\theta$ and $\hat{\pi}$.
 
-![](IMG_05AE469637B5-1.jpeg)
+![](IMG_D1D7A47D262D-1.jpeg)
 
 # 
 
